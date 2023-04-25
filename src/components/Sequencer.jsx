@@ -35,7 +35,7 @@ const acidSynth = new Tone.MonoSynth({
   },
 }).toDestination();
 
-const Sequencer = () => {
+const Sequencer = (mouse_IsDown) => {
   const [playState, setPlayState] = useState(Tone.Transport.state);
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);

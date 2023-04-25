@@ -17,12 +17,10 @@ const initialPattern = [
 
 // const synth = new Tone.MonoSynth().toDestination();
 
-const BassSequencer = (mouse_IsDown) => {
-  const [playState, setPlayState] = useState(Tone.Transport.state);
+const BassSequencer = () => {
+  // const [playState, setPlayState] = useState(Tone.Transport.state);
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
-  const [currentSound, setCurrentSound] = useState("acid");
-  const [waveform, setWaveform] = useState("sawtooth");
 
   function handleWaveformChange(event) {
     setWaveform(event.target.value);
@@ -31,7 +29,7 @@ const BassSequencer = (mouse_IsDown) => {
   const currentSynth = new Tone.MonoSynth().toDestination();
   const acidSynth = new Tone.MonoSynth({
     oscillator: {
-      type: waveform,
+      type: "sawtooth",
     },
     filter: {
       Q: 1,
@@ -47,7 +45,6 @@ const BassSequencer = (mouse_IsDown) => {
   }).toDestination();
   useEffect(
     () => {
-      const synth = currentSound === "current" ? currentSynth : acidSynth;
       const loop = new Tone.Sequence(
         (time, col) => {
           // Update active column for animation
@@ -71,11 +68,11 @@ const BassSequencer = (mouse_IsDown) => {
   );
 
   // Toggle playing / stopped
-  const toggle = useCallback(() => {
-    Tone.start();
-    Tone.Transport.toggle();
-    setPlayState(Tone.Transport.state);
-  }, []);
+  // const toggle = useCallback(() => {
+  //   Tone.start();
+  //   Tone.Transport.toggle();
+  //   setPlayState(Tone.Transport.state);
+  // }, []);
 
   // Update pattern by making a copy and inverting the value
   function setPattern({ x, y, value }) {
