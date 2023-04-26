@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import * as Tone from "tone";
 import "./Sequencer.css";
-import CircularSlider from "@fseehawer/react-circular-slider";
+
 const notes = ["D2", "E2", "F#2", "G2", "A2", "B2", "C#3", "D3"].reverse();
 
 const initialPattern = [
