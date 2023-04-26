@@ -58,51 +58,7 @@ const DrumSequencer = () => {
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
   const [bpm, setBpm] = useState(120);
-  const downloadLoop = () => {
-    const buffer = Tone.Offline(() => {
-      const loop = new Tone.Sequence(
-        (time, col) => {
-          pattern.map((row, drumIndex) => {
-            if (row[col]) {
-              synth.triggerAttack(drumMap[drumIndex], time);
-            }
-          });
-        },
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-        "16n"
-      ).start(0);
-    }, 32 * Tone.Time("16n").toSeconds()).then((buffer) => {
-      Tone.Transport.stop();
-      Tone.context.resume();
-      Tone.start();
-      const url = URL.createObjectURL(
-        new Blob([buffer.getChannelData(0)], { type: "audio/wav" })
-      );
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "loop.wav";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-  };
-  const testie = () => {
-    const buffer = Tone.Offline(() => {
-      const sine = new Tone.Oscillator().toDestination();
-      sine.start(0).stop(1);
-    }, 1).then((buffer) => {
-      const wav = Tone.Offline.toWav(buffer);
-      const blob = new Blob([new DataView(wav)], {
-        type: "audio/wav",
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "test.wav";
-      document.body.appendChild(link);
-      link.click();
-    });
-  };
+
   useEffect(() => {
     Tone.Transport.bpm.value = bpm;
     const loop = new Tone.Sequence(
@@ -136,10 +92,13 @@ const DrumSequencer = () => {
   }
 
   return (
-    <div className=''>
+    <div className='p-4'>
+      <h1 className='hidden lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
+        Rhythm
+      </h1>
       {pattern.map((row, y) => (
         <div key={y} style={{ display: "flex", justifyContent: "center" }}>
-          <div className='w-[50px] lg:w-[100px] px-2 text-left'>
+          <div className='w-[50px] lg:w-[100px] px-2 text-left text-sm lg:text-lg items-center flex xl:font-bold'>
             {returnDrumName(Object.values(drumMap)[y])}
           </div>
           {row.map((value, x) => (
@@ -197,10 +156,12 @@ const Square = ({ active, value, onClick }) => {
       // }}
       onClick={handleClick}
       className={` grid-container flex drumsquare items-center justify-center border border-solid ${
-        selected ? "!bg-[#691ff181]" : ""
+        selected
+          ? "!bg-[#691ff181] bg-gradient-to-r from-violet-500 to-blue-500 drop-shadow-xl shadow-lg shadow-blue-500/50 animate-pulse"
+          : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px]  `}
+      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]  `}
     >
       {selected}
     </div>

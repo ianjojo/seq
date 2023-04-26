@@ -13,6 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-tabs": "^6.0.1",
+    "recorder-js": "^1.0.7",
     "tone": "^14.7.77"
   },
   "devDependencies": {

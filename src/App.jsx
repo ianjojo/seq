@@ -43,7 +43,7 @@ function App() {
   }, []);
   return (
     <>
-      <div className='bg-gradient-to-br from-gray-900 to-gray-700 border-2 border-gray-400 rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg lg:p-6'>
+      <div className='bg-gradient-to-br from-gray-900 to-gray-700 border-2 border-gray-400 rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg lg:p-6 orbitron'>
         {mouse_IsDown && (
           <>
             {/* <BassSequencer /> */}

@@ -29,7 +29,7 @@ const BassSequencer = () => {
   const currentSynth = new Tone.MonoSynth().toDestination();
   const acidSynth = new Tone.MonoSynth({
     oscillator: {
-      type: "sawtooth",
+      type: "triangle",
     },
     filter: {
       Q: 1,
