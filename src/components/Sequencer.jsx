@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import * as Tone from "tone";
 import "./Sequencer.css";
 
-const notes = ["D4", "E4", "F#4", "G4", "A4", "B4", "C#5", "D5"].reverse();
+const notes = ["D2", "E2", "F#2", "G2", "A2", "B2", "C#3", "D3"].reverse();
 
 const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

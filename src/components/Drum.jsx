@@ -11,16 +11,6 @@ const drumMap = {
   6: "C3", // high tom
   7: "D3", // crash
 };
-// const drumMap = {
-//   0: "C2", // kick
-//   1: "D2", // snare
-//   2: "F2", // closed hi-hat
-//   3: "G2", // open hi-hat
-//   4: "A2", // low tom
-//   5: "B2", // mid tom
-//   6: "C3", // high tom
-//   7: "D3", // crash
-// };
 
 const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
