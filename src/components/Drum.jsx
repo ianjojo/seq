@@ -162,7 +162,7 @@ const DrumSequencer = () => {
           ))}
         </div>
       ))}
-      <div onClick={() => toggle()}>{playState}</div>
+
       <div className='sequencer-controls flex justify-between p-4 flex-col'>
         <button onClick={toggle}>
           {playState === "started" ? "Stop" : "Start"}
@@ -181,7 +181,7 @@ const DrumSequencer = () => {
             onChange={handleBpmChange}
           />
         </div>
-        <button onClick={downloadLoop}>Download Loop</button>
+        {/* <button onClick={downloadLoop}>Download Loop</button> */}
       </div>
     </div>
   );
@@ -206,11 +206,11 @@ const Square = ({ active, value, onClick }) => {
       //   border: active ? "1px solid #999" : "1px solid #eee",
       // }}
       onClick={handleClick}
-      className={`w-full grid-container flex drumsquare items-center justify-center border border-solid ${
+      className={` grid-container flex drumsquare items-center justify-center border border-solid ${
         selected ? "!bg-[#691ff181]" : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[25px] h-[25px] lg:w-[25px] lg:h-[25px]  `}
+      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px]  `}
     >
       {selected}
     </div>

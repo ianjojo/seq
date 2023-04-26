@@ -103,7 +103,6 @@ const Sequencer = (mouse_IsDown) => {
           ))}
         </div>
       ))}
-      <div onClick={() => toggle()}>{playState}</div>
     </div>
   );
 };
@@ -118,11 +117,11 @@ const Square = ({ active, value, onClick }) => {
 
   return (
     <div
-      className={`w-full drumsquare grid-container flex items-center justify-center border border-solid ${
+      className={` drumsquare grid-container flex items-center justify-center border border-solid ${
         selected ? "!bg-[#d81b7381]" : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[25px] h-[25px] lg:w-[25px] lg:h-[25px]`}
+      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px]`}
       onClick={handleClick}
     >
       {selected}
