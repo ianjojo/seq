@@ -25,9 +25,25 @@ function App() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const handleUserGesture = () => {
+      if (Tone.context.state !== "running") {
+        Tone.context.resume();
+      }
+    };
+
+    document.addEventListener("mousedown", handleUserGesture, { once: true });
+    document.addEventListener("touchstart", handleUserGesture, { once: true });
+
+    return () => {
+      document.removeEventListener("mousedown", handleUserGesture);
+      document.removeEventListener("touchstart", handleUserGesture);
+    };
+  }, []);
   return (
     <>
-      <div className='outer'>
+      <div className='bg-gradient-to-br from-gray-900 to-gray-700 border-2 border-gray-400 rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg lg:p-6'>
         {mouse_IsDown && (
           <>
             {/* <BassSequencer /> */}

@@ -68,7 +68,51 @@ const DrumSequencer = () => {
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
   const [bpm, setBpm] = useState(120);
-
+  const downloadLoop = () => {
+    const buffer = Tone.Offline(() => {
+      const loop = new Tone.Sequence(
+        (time, col) => {
+          pattern.map((row, drumIndex) => {
+            if (row[col]) {
+              synth.triggerAttack(drumMap[drumIndex], time);
+            }
+          });
+        },
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        "16n"
+      ).start(0);
+    }, 32 * Tone.Time("16n").toSeconds()).then((buffer) => {
+      Tone.Transport.stop();
+      Tone.context.resume();
+      Tone.start();
+      const url = URL.createObjectURL(
+        new Blob([buffer.getChannelData(0)], { type: "audio/wav" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "loop.wav";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+  const testie = () => {
+    const buffer = Tone.Offline(() => {
+      const sine = new Tone.Oscillator().toDestination();
+      sine.start(0).stop(1);
+    }, 1).then((buffer) => {
+      const wav = Tone.Offline.toWav(buffer);
+      const blob = new Blob([new DataView(wav)], {
+        type: "audio/wav",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "test.wav";
+      document.body.appendChild(link);
+      link.click();
+    });
+  };
   useEffect(() => {
     Tone.Transport.bpm.value = bpm;
     const loop = new Tone.Sequence(
@@ -100,11 +144,12 @@ const DrumSequencer = () => {
   function handleBpmChange(event) {
     setBpm(event.target.value);
   }
+
   return (
     <div className=''>
       {pattern.map((row, y) => (
         <div key={y} style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ width: 100, textAlign: "left" }}>
+          <div className='w-[50px] lg:w-[100px] px-2 text-left'>
             {returnDrumName(Object.values(drumMap)[y])}
           </div>
           {row.map((value, x) => (
@@ -118,19 +163,25 @@ const DrumSequencer = () => {
         </div>
       ))}
       <div onClick={() => toggle()}>{playState}</div>
-      <div className='sequencer-controls'>
+      <div className='sequencer-controls flex justify-between p-4 flex-col'>
         <button onClick={toggle}>
           {playState === "started" ? "Stop" : "Start"}
         </button>
-        <span>BPM:</span>
-        <input
-          type='range'
-          min='60'
-          max='240'
-          value={bpm}
-          onChange={handleBpmChange}
-        />
-        <span>{bpm}</span>
+        <div className='flex items-center justify-center'>
+          <div className='flex p-4'>
+            <span className=''>BPM:</span>
+            <span>{bpm}</span>
+          </div>
+          <input
+            className='w-[70%]'
+            type='range'
+            min='60'
+            max='240'
+            value={bpm}
+            onChange={handleBpmChange}
+          />
+        </div>
+        <button onClick={downloadLoop}>Download Loop</button>
       </div>
     </div>
   );
@@ -145,17 +196,21 @@ const Square = ({ active, value, onClick }) => {
 
   return (
     <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 25,
-        height: 25,
-        background: selected ? "#691ff181" : "",
-        border: active ? "1px solid #999" : "1px solid #eee",
-      }}
+      // style={{
+      //   display: "flex",
+      //   alignItems: "center",
+      //   justifyContent: "center",
+      //   width: 25,
+      //   height: 25,
+      //   background: selected ? "#691ff181" : "",
+      //   border: active ? "1px solid #999" : "1px solid #eee",
+      // }}
       onClick={handleClick}
-      className='drumsquare grid-container'
+      className={`w-full grid-container flex drumsquare items-center justify-center border border-solid ${
+        selected ? "!bg-[#691ff181]" : ""
+      } ${
+        active ? "border-white" : "border-[#999]"
+      } w-[25px] h-[25px] lg:w-[25px] lg:h-[25px]  `}
     >
       {selected}
     </div>

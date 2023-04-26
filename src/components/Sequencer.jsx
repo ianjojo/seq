@@ -82,8 +82,8 @@ const Sequencer = (mouse_IsDown) => {
   }
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+    <div className='p-4'>
+      <div style={{ display: "flex", justifyContent: "center " }}>
         <div style={{ width: 25 }} />
         {/* {Array.from({ length: 16 }, (_, i) => (
           <div key={i} style={{ width: 25, textAlign: "center" }}>
@@ -93,7 +93,7 @@ const Sequencer = (mouse_IsDown) => {
       </div>
       {pattern.map((row, y) => (
         <div key={y} style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ width: 100, textAlign: "left" }}>{notes[y]}</div>
+          <div className='w-[50px] lg:w-[100px] px-2 text-left'>{notes[y]}</div>
           {row.map((value, x) => (
             <Square
               key={x}
@@ -119,16 +119,11 @@ const Square = ({ active, value, onClick }) => {
 
   return (
     <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 25,
-        height: 25,
-        background: selected ? "#d81b7381" : "",
-        border: active ? "1px solid #999" : "1px solid #eee",
-      }}
-      className='square grid-container'
+      className={`w-full drumsquare grid-container flex items-center justify-center border border-solid ${
+        selected ? "!bg-[#d81b7381]" : ""
+      } ${
+        active ? "border-white" : "border-[#999]"
+      } w-[25px] h-[25px] lg:w-[25px] lg:h-[25px]`}
       onClick={handleClick}
     >
       {selected}
