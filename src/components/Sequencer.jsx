@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import * as Tone from "tone";
 import "./Sequencer.css";
-import Knob from "react-knob";
 
 const notes = ["D4", "E4", "F#4", "G4", "A4", "B4", "C#5", "D5"].reverse();
 
