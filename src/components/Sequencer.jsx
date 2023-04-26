@@ -68,7 +68,8 @@ const Sequencer = (mouse_IsDown) => {
     "B2",
     "C3",
   ]);
-  const notes = currentScale.reverse();
+  const notes = currentScale;
+  // const notes = currentScale.reverse();
   const [playState, setPlayState] = useState(Tone.Transport.state);
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
