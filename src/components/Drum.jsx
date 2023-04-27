@@ -11,7 +11,38 @@ const drumMap = {
   6: "C3", // high tom
   7: "D3", // crash
 };
-
+const drumkits = {
+  classic: {
+    C2: "/drum-samples/kick.wav",
+    D2: "/drum-samples/snare.wav",
+    F2: "/drum-samples/closed-hat.wav",
+    G2: "/drum-samples/open-hat.wav",
+    A2: "/drum-samples/perc1.wav",
+    B2: "/drum-samples/perc2.wav",
+    C3: "/drum-samples/perc3.wav",
+    D3: "/drum-samples/perc4.wav",
+  },
+  electronic: {
+    C2: "/drum-samples/808-kick.wav",
+    D2: "/drum-samples/808-snare.wav",
+    F2: "/drum-samples/808-hihat.wav",
+    G2: "/drum-samples/808-openhat.wav",
+    A2: "/drum-samples/808-clap.wav",
+    B2: "/drum-samples/808-perc1.wav",
+    C3: "/drum-samples/808-perc2.wav",
+    D3: "/drum-samples/808-perc3.wav",
+  },
+  house: {
+    C2: "/drum-samples/house-kick.wav",
+    D2: "/drum-samples/house-snare.wav",
+    F2: "/drum-samples/house-hihat.wav",
+    G2: "/drum-samples/house-openhat.wav",
+    A2: "/drum-samples/house-clap.wav",
+    B2: "/drum-samples/house-perc1.wav",
+    C3: "/drum-samples/house-perc2.wav",
+    D3: "/drum-samples/house-perc3.wav",
+  },
+};
 const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -23,17 +54,6 @@ const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const synth = new Tone.Sampler({
-  C2: "/drum-samples/kick.wav",
-  D2: "/drum-samples/snare.wav",
-  F2: "/drum-samples/closed-hat.wav",
-  G2: "/drum-samples/open-hat.wav",
-  A2: "/drum-samples/perc1.wav",
-  B2: "/drum-samples/perc2.wav",
-  C3: "/drum-samples/perc3.wav",
-  D3: "/drum-samples/perc4.wav",
-}).toDestination();
-
 const returnDrumName = (drum) => {
   if (drum === "C2") {
     return "BD";
@@ -44,13 +64,13 @@ const returnDrumName = (drum) => {
   } else if (drum === "G2") {
     return "OH";
   } else if (drum === "A2") {
-    return "PC1";
+    return "CL";
   } else if (drum === "B2") {
-    return "PC2";
+    return "PC1";
   } else if (drum === "C3") {
-    return "PC3";
+    return "PC2";
   } else if (drum === "D3") {
-    return "PC4";
+    return "PC3";
   }
 };
 const DrumSequencer = () => {
@@ -58,8 +78,30 @@ const DrumSequencer = () => {
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
   const [bpm, setBpm] = useState(120);
+  const [drumkit, setDrumkit] = useState("classic");
+  // const synth = new Tone.Sampler({
+  //   C2: "/drum-samples/kick.wav",
+  //   D2: "/drum-samples/snare.wav",
+  //   F2: "/drum-samples/closed-hat.wav",
+  //   G2: "/drum-samples/open-hat.wav",
+  //   A2: "/drum-samples/perc1.wav",
+  //   B2: "/drum-samples/perc2.wav",
+  //   C3: "/drum-samples/perc3.wav",
+  //   D3: "/drum-samples/perc4.wav",
+  // }).toDestination();
 
+  const drum = new Tone.Sampler(drumkits[drumkit]).toDestination();
+  function handleDrumkitChange(event) {
+    setDrumkit(event.target.value);
+  }
   useEffect(() => {
+    const array =
+      pattern[0].length === 16
+        ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        : [
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+            19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+          ];
     Tone.Transport.bpm.value = bpm;
     const loop = new Tone.Sequence(
       (time, col) => {
@@ -67,15 +109,15 @@ const DrumSequencer = () => {
 
         pattern.map((row, drumIndex) => {
           if (row[col]) {
-            synth.triggerAttack(drumMap[drumIndex], time);
+            drum.triggerAttack(drumMap[drumIndex], time);
           }
         });
       },
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+      array,
       "16n"
     ).start(0);
     return () => loop.dispose();
-  }, [pattern, bpm]);
+  }, [pattern, bpm, drumkit, pattern.length]);
 
   const toggle = useCallback(() => {
     Tone.Transport.toggle();
@@ -87,15 +129,72 @@ const DrumSequencer = () => {
     patternCopy[y][x] = value ? 0 : 1;
     updatePattern(patternCopy);
   }
+  function doublePatternSize() {
+    initialPattern = initialPattern.concat(
+      initialPattern.map((row) => row.slice())
+    );
+  }
+  function doubleArraySize(arr) {
+    const newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      const row = arr[i];
+      const newRow = [];
+      for (let j = 0; j < row.length; j++) {
+        newRow.push(row[j], row[j]); // duplicate each element
+      }
+      newArr.push(newRow);
+    }
+    return newArr;
+  }
+  const setPatternLength = (e) => {
+    const length = parseInt(e.target.value);
+    let patternCopy = [...pattern];
+    if (length === 16) {
+      for (let i = 0; i < patternCopy.length; i++) {
+        if (patternCopy[i].length === 32) {
+          patternCopy[i] = patternCopy[i].slice(0, 16);
+        }
+      }
+    } else {
+      for (let i = 0; i < patternCopy.length; i++) {
+        if (patternCopy[i].length === 16) {
+          for (let j = 0; j < 16; j++) {
+            patternCopy[i].push(0);
+          }
+        }
+      }
+
+      console.log(patternCopy);
+    }
+    updatePattern(patternCopy);
+  };
   function handleBpmChange(event) {
     setBpm(event.target.value);
   }
 
   return (
     <div className='p-4'>
-      <h1 className='hidden lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
-        Rhythm
-      </h1>
+      <div className='flex'>
+        <h1 className='hidden lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
+          Rhythm
+        </h1>
+        <select
+          className='border rounded-lg px-3 py-2'
+          value={drumkit}
+          onChange={handleDrumkitChange}
+        >
+          <option value='classic'>Synthwave</option>
+          <option value='electronic'>TR-808</option>
+          <option value='house'>House</option>
+        </select>
+      </div>
+      {/* <select
+        onChange={(e) => setPatternLength(e)}
+        className='rounded-lg p-2 m-2'
+      >
+        <option value='16'>16</option>
+        <option value='32'>32</option>
+      </select> */}
       {pattern.map((row, y) => (
         <div key={y} style={{ display: "flex", justifyContent: "center" }}>
           <div className='w-[50px] lg:w-[100px] px-2 text-left text-sm lg:text-lg items-center flex xl:font-bold'>
@@ -116,6 +215,7 @@ const DrumSequencer = () => {
         <button onClick={toggle}>
           {playState === "started" ? "Stop" : "Start"}
         </button>
+
         <div className='flex items-center justify-center'>
           <div className='flex p-4'>
             <span className=''>BPM:</span>

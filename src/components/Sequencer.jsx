@@ -17,7 +17,7 @@ const initialPattern = [
 const currentSynth = new Tone.MonoSynth().toDestination();
 const acidSynth = new Tone.MonoSynth({
   oscillator: {
-    type: "pulse",
+    type: "sine",
   },
   filter: {
     Q: 1,
@@ -38,7 +38,7 @@ function getNotesForScale(scale) {
     case "A Minor":
       return ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "A1"];
     case "G Major":
-      return ["G2", "A2", "B2", "C2", "D2", "E2", "F2#", "G1"];
+      return ["G2", "A2", "B2", "C2", "D2", "E2", "F#2", "G1"];
     case "E Minor":
       return ["E2", "F#2", "G2", "A2", "B2", "C2", "D2", "E1"];
     case "D Major":
@@ -46,13 +46,13 @@ function getNotesForScale(scale) {
     case "B Minor":
       return ["B2", "C#2", "D2", "E2", "F#2", "G2", "A1", "B1"];
     case "F Major":
-      return ["F2", "G2", "A2", "Bb", "C2", "D2", "E2", "F1"];
+      return ["F2", "G2", "A2", "A#2", "C2", "D2", "E2", "F1"];
     case "D Minor":
       return ["D2", "E2", "F2", "G2", "A2", "A#2", "C2", "D1"];
     case "Bb Major":
       return ["Bb2", "C2", "D2", "D#2", "F2", "G1", "A1", "Bb1"];
-    case "G2 Minor":
-      return ["G2", "A2", "A#2", "C2", "D2", "Eb", "F3"];
+    case "G Minor":
+      return ["G2", "A2", "A#2", "C2", "D2", "D#2", "F3"];
     default:
       return [];
   }
@@ -78,6 +78,14 @@ const Sequencer = (mouse_IsDown) => {
 
   useEffect(
     () => {
+      const array =
+        pattern[0].length === 16
+          ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+          : [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+            ];
+      acidSynth.oscillator.type = oscillatorType;
       const synth = currentSound === "current" ? currentSynth : acidSynth;
       const loop = new Tone.Sequence(
         (time, col) => {
@@ -97,12 +105,16 @@ const Sequencer = (mouse_IsDown) => {
             }
           });
         },
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        array,
         "16n"
       ).start(0);
-      return () => loop.dispose();
+      return () => {
+        // Tone.Transport.cancel();
+        // Tone.Transport.clear(Tone.Transport.scheduleRepeat);
+        loop.dispose();
+      };
     },
-    [pattern, currentScale] // Retrigger when pattern changes
+    [pattern, currentScale, oscillatorType] // Retrigger when pattern changes
   );
 
   // Toggle playing / stopped
@@ -112,6 +124,9 @@ const Sequencer = (mouse_IsDown) => {
     setPlayState(Tone.Transport.state);
   }, []);
 
+  const setOsc = (e) => {
+    setOscillatorType(e.target.value);
+  };
   // Update pattern by making a copy and inverting the value
   function setPattern({ x, y, value }) {
     const patternCopy = [...pattern];
@@ -129,24 +144,30 @@ const Sequencer = (mouse_IsDown) => {
         <h1 className='hidden lg:inline-block p-2 orbitron text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
           Bass
         </h1>
-        <select onChange={(e) => setScale(e)} className='rounded-lg p-2 m-2'>
-          <option value='C Major'>C Major</option>
-          <option value='A Minor'>A Minor</option>
-          <option value='G Major'>G Major</option>
-          <option value='E Minor'>E Minor</option>
-          <option value='D Major'>D Major</option>
-          <option value='B Minor'>B Minor</option>
-          <option value='F Major'>F Major</option>
-          <option value='D Minor'>D Minor</option>
-          <option value='Bb Major'>Bb Major</option>
-        </select>
-        {/* <select onChange={(e) => setOsc(e)} className='rounded-lg p-2 m-2'>
-          <option value='sawtooth'>sawtooth</option>
-          <option value='sine'>sine</option>
-          <option value='pulse'>pulse</option>
-          <option value='triangle'>triangle</option>
-          <option value='square'>square</option>
-        </select> */}
+        <div className='flex items-center pr-4'>
+          <p>key</p>
+          <select onChange={(e) => setScale(e)} className='rounded-lg p-2 m-2'>
+            <option value='C Major'>C Major</option>
+            <option value='A Minor'>A Minor</option>
+            <option value='G Major'>G Major</option>
+            <option value='E Minor'>E Minor</option>
+            <option value='D Major'>D Major</option>
+            <option value='B Minor'>B Minor</option>
+            <option value='F Major'>F Major</option>
+            <option value='D Minor'>D Minor</option>
+            <option value='Bb Major'>Bb Major</option>
+          </select>
+        </div>
+        <div className='flex items-center'>
+          <p className='w-full'>osc</p>
+          <select onChange={(e) => setOsc(e)} className='rounded-lg p-2 m-2'>
+            <option value='sawtooth'>sawtooth</option>
+            <option value='sine'>sine</option>
+            <option value='pulse'>pulse</option>
+            <option value='triangle'>triangle</option>
+            <option value='square'>square</option>
+          </select>
+        </div>
       </div>
       <div style={{ display: "flex", justifyContent: "center " }}>
         <div style={{ width: 25 }} />
