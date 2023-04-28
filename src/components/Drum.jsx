@@ -73,7 +73,7 @@ const returnDrumName = (drum) => {
     return "PC3";
   }
 };
-const DrumSequencer = () => {
+const DrumSequencer = ({ patternLength }) => {
   const [playState, setPlayState] = useState(Tone.Transport.state);
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
@@ -102,6 +102,7 @@ const DrumSequencer = () => {
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
             19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
           ];
+
     Tone.Transport.bpm.value = bpm;
     const loop = new Tone.Sequence(
       (time, col) => {
@@ -119,6 +120,9 @@ const DrumSequencer = () => {
     return () => loop.dispose();
   }, [pattern, bpm, drumkit, pattern.length]);
 
+  useEffect(() => {
+    setPatternLength();
+  }, [patternLength]);
   const toggle = useCallback(() => {
     Tone.Transport.toggle();
     setPlayState(Tone.Transport.state);
@@ -146,8 +150,8 @@ const DrumSequencer = () => {
     }
     return newArr;
   }
-  const setPatternLength = (e) => {
-    const length = parseInt(e.target.value);
+  const setPatternLength = () => {
+    const length = parseInt(patternLength);
     let patternCopy = [...pattern];
     if (length === 16) {
       for (let i = 0; i < patternCopy.length; i++) {
@@ -173,7 +177,7 @@ const DrumSequencer = () => {
   }
 
   return (
-    <div className='p-4'>
+    <div className='p-4 pb-0'>
       <div className='flex'>
         <h1 className='hidden lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
           Rhythm
@@ -211,7 +215,7 @@ const DrumSequencer = () => {
         </div>
       ))}
 
-      <div className='sequencer-controls flex justify-between p-4 flex-col'>
+      <div className='sequencer-controls flex justify-between p-4 pb-0 flex-col'>
         <button onClick={toggle}>
           {playState === "started" ? "Stop" : "Start"}
         </button>

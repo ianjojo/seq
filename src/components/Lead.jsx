@@ -14,67 +14,107 @@ const initialPattern = [
 ];
 
 // const synth = new Tone.MonoSynth().toDestination();
-const currentSynth = new Tone.MonoSynth().toDestination();
-const acidSynth = new Tone.MonoSynth({
+
+const acidSynth = new Tone.FMSynth({
+  harmonicity: 8,
+  modulationIndex: 2,
   oscillator: {
     type: "sine",
   },
-  filter: {
-    Q: 1,
-    type: "lowpass",
-    rolloff: -24,
-  },
   envelope: {
-    attack: 0.01,
-    decay: 0.1,
-    sustain: 0.4,
-    release: 0.5,
+    attack: 0.001,
+    decay: 2,
+    sustain: 0.1,
+    release: 2,
+  },
+  modulation: {
+    type: "square",
+  },
+  modulationEnvelope: {
+    attack: 0.002,
+    decay: 0.2,
+    sustain: 0,
+    release: 0.2,
   },
 }).toDestination();
+const reverb = new Tone.Reverb({
+  decay: 8,
+}).toDestination();
+acidSynth.connect(reverb);
+const feedbackDelay = new Tone.FeedbackDelay({
+  delayTime: "8n", // delay time is an eighth note
+  feedback: 0.5, // set feedback amount
+  wet: 0.5, // set wet/dry mix
+}).toDestination();
+
+// connect the synth to the delay
+acidSynth.connect(feedbackDelay);
 function getNotesForScale(scale) {
   switch (scale) {
     case "C Major":
-      return ["C2", "D2", "E2", "F2", "G2", "A2", "B2", "C3"];
+      return ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
     case "A Minor":
-      return ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "A1"];
+      return ["A4", "B4", "C4", "D4", "E4", "F4", "G4", "A5"];
     case "G Major":
-      return ["G2", "A2", "B2", "C2", "D2", "E2", "F#2", "G1"];
+      return ["G4", "A4", "B4", "C4", "D4", "E4", "F#4", "G5"];
     case "E Minor":
-      return ["E2", "F#2", "G2", "A2", "B2", "C2", "D2", "E1"];
+      return ["E4", "F#4", "G4", "A4", "B4", "C4", "D4", "E5"];
     case "D Major":
-      return ["D2", "E2", "F2#", "G2", "A2", "B2", "C#2", "D1"];
+      return ["D4", "E4", "F4#", "G4", "A4", "B4", "C#4", "D5"];
     case "B Minor":
-      return ["B2", "C#2", "D2", "E2", "F#2", "G2", "A1", "B1"];
+      return ["B4", "C#4", "D4", "E4", "F#4", "G4", "A5", "B5"];
     case "F Major":
-      return ["F2", "G2", "A2", "A#2", "C2", "D2", "E2", "F1"];
+      return ["F4", "G4", "A4", "A#4", "C4", "D4", "E4", "F5"];
     case "D Minor":
-      return ["D2", "E2", "F2", "G2", "A2", "A#2", "C2", "D1"];
+      return ["D4", "E4", "F4", "G4", "A4", "A#4", "C4", "D5"];
     case "Bb Major":
-      return ["Bb2", "C2", "D2", "D#2", "F2", "G1", "A1", "Bb1"];
+      return ["Bb4", "C4", "D4", "D#4", "F4", "G5", "A5", "Bb5"];
     case "G Minor":
-      return ["G2", "A2", "A#2", "C2", "D2", "D#2", "F3"];
+      return ["G4", "A4", "A#4", "C4", "D4", "D#4", "F5"];
     default:
       return [];
   }
 }
-const Sequencer = ({ mouse_IsDown, patternLength }) => {
+const Lead = ({ mouse_IsDown, patternLength }) => {
   const [currentScale, setCurrentScale] = useState([
-    "C2",
-    "D2",
-    "E2",
-    "F2",
-    "G2",
-    "A2",
-    "B2",
-    "C3",
+    "C4",
+    "D4",
+    "E4",
+    "F4",
+    "G4",
+    "A4",
+    "B4",
+    "C5",
   ]);
   const notes = currentScale;
+
   // const notes = currentScale.reverse();
   const [playState, setPlayState] = useState(Tone.Transport.state);
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
   const [currentSound, setCurrentSound] = useState("acid");
   const [oscillatorType, setOscillatorType] = useState("sine");
+  const [delayFeedback, setDelayFeedback] = useState(0.5);
+  const [clearNotes, setClearNotes] = useState(false);
+  const [jsx, setJsx] = useState(null);
+
+  const clearPattern = () => {
+    const newone = [];
+    updatePattern(newone);
+
+    const newPattern = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+
+    updatePattern(newPattern);
+  };
 
   useEffect(
     () => {
@@ -140,6 +180,7 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
   function setScale(e) {
     setCurrentScale(getNotesForScale(e.target.value));
   }
+
   const setPatternLength = () => {
     const length = parseInt(patternLength);
     let patternCopy = [...pattern];
@@ -162,11 +203,12 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
     }
     updatePattern(patternCopy);
   };
+
   return (
     <div className='p-4'>
       <div className='flex'>
         <h1 className='hidden lg:inline-block p-2 orbitron text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
-          Bass
+          Lead
         </h1>
         <div className='flex items-center pr-4'>
           <p>key</p>
@@ -181,6 +223,9 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
             <option value='D Minor'>D Minor</option>
             <option value='Bb Major'>Bb Major</option>
           </select>
+          {/* <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+            clear pattern
+          </button> */}
         </div>
         <div className='flex items-center'>
           <p className='w-full'>osc</p>
@@ -236,7 +281,7 @@ const Square = ({ active, value, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]`}
+      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px] }`}
       onClick={handleClick}
     >
       {selected}
@@ -244,4 +289,4 @@ const Square = ({ active, value, onClick }) => {
   );
 };
 
-export default Sequencer;
+export default Lead;
