@@ -79,21 +79,85 @@ const DrumSequencer = ({ patternLength }) => {
   const [pattern, updatePattern] = useState(initialPattern);
   const [bpm, setBpm] = useState(120);
   const [drumkit, setDrumkit] = useState("classic");
-  // const synth = new Tone.Sampler({
-  //   C2: "/drum-samples/kick.wav",
-  //   D2: "/drum-samples/snare.wav",
-  //   F2: "/drum-samples/closed-hat.wav",
-  //   G2: "/drum-samples/open-hat.wav",
-  //   A2: "/drum-samples/perc1.wav",
-  //   B2: "/drum-samples/perc2.wav",
-  //   C3: "/drum-samples/perc3.wav",
-  //   D3: "/drum-samples/perc4.wav",
-  // }).toDestination();
 
   const drum = new Tone.Sampler(drumkits[drumkit]).toDestination();
   function handleDrumkitChange(event) {
     setDrumkit(event.target.value);
   }
+  const clearPattern = () => {
+    const blank16 = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const blank32 = [
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+    ];
+    if (pattern[0].length === 16) {
+      updatePattern(blank16);
+    } else {
+      updatePattern(blank32);
+    }
+  };
+
+  function createRandomPattern(pattern) {
+    const numPatterns = 8;
+    const patternLength = pattern[0].length;
+    const randomPatterns = [];
+
+    for (let i = 0; i < numPatterns; i++) {
+      const newPattern = [];
+
+      for (let j = 0; j < patternLength; j++) {
+        newPattern.push(Math.random() < 0.7 ? 0 : 1);
+      }
+
+      randomPatterns.push(newPattern);
+    }
+
+    return randomPatterns;
+  }
+
+  const newRandomPattern = () => {
+    const randomPattern = createRandomPattern(pattern);
+    updatePattern(randomPattern);
+  };
   useEffect(() => {
     const array =
       pattern[0].length === 16
@@ -191,6 +255,12 @@ const DrumSequencer = ({ patternLength }) => {
           <option value='electronic'>TR-808</option>
           <option value='house'>House</option>
         </select>
+        <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+          clear
+        </button>
+        <button onClick={newRandomPattern} className='rounded-lg p-2 m-2'>
+          random
+        </button>
       </div>
       {/* <select
         onChange={(e) => setPatternLength(e)}
@@ -208,7 +278,7 @@ const DrumSequencer = ({ patternLength }) => {
             <Square
               key={x}
               active={activeColumn === x}
-              selected={value}
+              selected={!!value}
               onClick={() => setPattern({ x, y, value })}
             />
           ))}
@@ -239,13 +309,13 @@ const DrumSequencer = ({ patternLength }) => {
     </div>
   );
 };
-const Square = ({ active, value, onClick }) => {
-  const [selected, setSelected] = useState(value);
+const Square = ({ active, selected, onClick }) => {
+  // const [selected, setSelected] = useState(value);
 
-  const handleClick = () => {
-    setSelected(!selected);
-    onClick(!selected);
-  };
+  // const handleClick = () => {
+  //   setSelected(!selected);
+  //   onClick(!selected);
+  // };
 
   return (
     <div
@@ -258,7 +328,7 @@ const Square = ({ active, value, onClick }) => {
       //   background: selected ? "#691ff181" : "",
       //   border: active ? "1px solid #999" : "1px solid #eee",
       // }}
-      onClick={handleClick}
+      onClick={onClick}
       className={` grid-container flex drumsquare items-center justify-center border border-solid ${
         selected
           ? "!bg-[#691ff181] bg-gradient-to-r from-violet-500 to-blue-500 drop-shadow-xl shadow-lg shadow-blue-500/50 animate-pulse"

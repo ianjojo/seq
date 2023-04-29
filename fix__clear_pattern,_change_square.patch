@@ -1,0 +1,76 @@
+Index: src/components/Lead.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/Lead.jsx b/src/components/Lead.jsx
+--- a/src/components/Lead.jsx	(revision 4595abdae516187bc3fc37e85587dac0e727ec1a)
++++ b/src/components/Lead.jsx	(date 1682718268974)
+@@ -99,21 +99,7 @@
+   const [jsx, setJsx] = useState(null);
+ 
+   const clearPattern = () => {
+-    const newone = [];
+-    updatePattern(newone);
+-
+-    const newPattern = [
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+-    ];
+-
+-    updatePattern(newPattern);
++    updatePattern(initialPattern);
+   };
+ 
+   useEffect(
+@@ -223,9 +209,9 @@
+             <option value='D Minor'>D Minor</option>
+             <option value='Bb Major'>Bb Major</option>
+           </select>
+-          {/* <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
++          <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+             clear pattern
+-          </button> */}
++          </button>
+         </div>
+         <div className='flex items-center'>
+           <p className='w-full'>osc</p>
+@@ -255,7 +241,7 @@
+             <Square
+               key={x}
+               active={activeColumn === x}
+-              selected={value}
++              selected={!!value}
+               onClick={() => setPattern({ x, y, value })}
+             />
+           ))}
+@@ -265,13 +251,7 @@
+   );
+ };
+ 
+-const Square = ({ active, value, onClick }) => {
+-  const [selected, setSelected] = useState(value);
+-
+-  const handleClick = () => {
+-    setSelected(!selected);
+-    onClick(!selected);
+-  };
++const Square = ({ active, selected, onClick }) => {
+ 
+   return (
+     <div
+@@ -282,7 +262,7 @@
+       } ${
+         active ? "border-white" : "border-[#999]"
+       } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px] }`}
+-      onClick={handleClick}
++      onClick={onClick}
+     >
+       {selected}
+     </div>

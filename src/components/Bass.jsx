@@ -57,7 +57,7 @@ function getNotesForScale(scale) {
       return [];
   }
 }
-const Sequencer = ({ mouse_IsDown, patternLength }) => {
+const Bass = ({ mouse_IsDown, patternLength }) => {
   const [currentScale, setCurrentScale] = useState([
     "C2",
     "D2",
@@ -75,6 +75,76 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
   const [pattern, updatePattern] = useState(initialPattern);
   const [currentSound, setCurrentSound] = useState("acid");
   const [oscillatorType, setOscillatorType] = useState("sine");
+  function createRandomPattern(numRows, numCols, chanceOfZero = 0.1) {
+    const pattern = [];
+    for (let j = 0; j < numCols; j++) {
+      const row = new Array(numRows).fill(0);
+      const i = Math.floor(Math.random() * numRows);
+      if (Math.random() < chanceOfZero) {
+        row[i] = 0;
+      } else {
+        row[i] = 1;
+      }
+      pattern.push(row);
+    }
+    return pattern;
+  }
+
+  const newRandomPattern = () => {
+    const randomPattern = createRandomPattern(pattern[0].length, 8);
+    updatePattern(randomPattern);
+  };
+  const clearPattern = () => {
+    const blank16 = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const blank32 = [
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+    ];
+    if (pattern[0].length === 16) {
+      updatePattern(blank16);
+    } else {
+      updatePattern(blank32);
+    }
+  };
 
   useEffect(
     () => {
@@ -192,6 +262,12 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
             <option value='square'>square</option>
           </select>
         </div>
+        <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+          clear
+        </button>
+        <button onClick={newRandomPattern} className='rounded-lg p-2 m-2'>
+          random
+        </button>
       </div>
       <div style={{ display: "flex", justifyContent: "center " }}>
         <div style={{ width: 25 }} />
@@ -210,7 +286,7 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
             <Square
               key={x}
               active={activeColumn === x}
-              selected={value}
+              selected={!!value}
               onClick={() => setPattern({ x, y, value })}
             />
           ))}
@@ -220,14 +296,7 @@ const Sequencer = ({ mouse_IsDown, patternLength }) => {
   );
 };
 
-const Square = ({ active, value, onClick }) => {
-  const [selected, setSelected] = useState(value);
-
-  const handleClick = () => {
-    setSelected(!selected);
-    onClick(!selected);
-  };
-
+const Square = ({ active, selected, onClick }) => {
   return (
     <div
       className={` drumsquare grid-container flex items-center justify-center border border-solid ${
@@ -237,11 +306,11 @@ const Square = ({ active, value, onClick }) => {
       } ${
         active ? "border-white" : "border-[#999]"
       } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]`}
-      onClick={handleClick}
+      onClick={onClick}
     >
       {selected}
     </div>
   );
 };
 
-export default Sequencer;
+export default Bass;

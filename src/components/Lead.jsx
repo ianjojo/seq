@@ -96,13 +96,8 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
   const [oscillatorType, setOscillatorType] = useState("sine");
   const [delayFeedback, setDelayFeedback] = useState(0.5);
   const [clearNotes, setClearNotes] = useState(false);
-  const [jsx, setJsx] = useState(null);
-
   const clearPattern = () => {
-    const newone = [];
-    updatePattern(newone);
-
-    const newPattern = [
+    const blank16 = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -112,8 +107,64 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
+    const blank32 = [
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+      ],
+    ];
+    if (pattern[0].length === 16) {
+      updatePattern(blank16);
+    } else {
+      updatePattern(blank32);
+    }
+  };
+  function createRandomPattern(numRows, numCols, chanceOfZero = 0.1) {
+    const pattern = [];
+    for (let j = 0; j < numCols; j++) {
+      const row = new Array(numRows).fill(0);
+      const i = Math.floor(Math.random() * numRows);
+      if (Math.random() < chanceOfZero) {
+        row[i] = 0;
+      } else {
+        row[i] = 1;
+      }
+      pattern.push(row);
+    }
+    return pattern;
+  }
 
-    updatePattern(newPattern);
+  const newRandomPattern = () => {
+    const randomPattern = createRandomPattern(pattern[0].length, 8);
+    updatePattern(randomPattern);
   };
 
   useEffect(
@@ -223,9 +274,6 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
             <option value='D Minor'>D Minor</option>
             <option value='Bb Major'>Bb Major</option>
           </select>
-          {/* <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
-            clear pattern
-          </button> */}
         </div>
         <div className='flex items-center'>
           <p className='w-full'>osc</p>
@@ -237,14 +285,15 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
             <option value='square'>square</option>
           </select>
         </div>
+        <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+          clear
+        </button>
+        <button onClick={newRandomPattern} className='rounded-lg p-2 m-2'>
+          random
+        </button>
       </div>
       <div style={{ display: "flex", justifyContent: "center " }}>
         <div style={{ width: 25 }} />
-        {/* {Array.from({ length: 16 }, (_, i) => (
-          <div key={i} style={{ width: 25, textAlign: "center" }}>
-            {i}
-          </div>
-        ))} */}
       </div>
       {pattern.map((row, y) => (
         <div key={y} style={{ display: "flex", justifyContent: "center" }}>
@@ -255,7 +304,7 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
             <Square
               key={x}
               active={activeColumn === x}
-              selected={value}
+              selected={!!value}
               onClick={() => setPattern({ x, y, value })}
             />
           ))}
@@ -265,8 +314,8 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
   );
 };
 
-const Square = ({ active, value, onClick }) => {
-  const [selected, setSelected] = useState(value);
+const Square = ({ active, selected, onClick }) => {
+  // const [selected, setSelected] = useState(value);
 
   const handleClick = () => {
     setSelected(!selected);
@@ -282,7 +331,7 @@ const Square = ({ active, value, onClick }) => {
       } ${
         active ? "border-white" : "border-[#999]"
       } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px] }`}
-      onClick={handleClick}
+      onClick={onClick}
     >
       {selected}
     </div>

@@ -6,7 +6,7 @@ import "./App.css";
 import DrumSequencer from "./components/Drum";
 
 import * as Tone from "tone";
-import Sequencer from "./components/Sequencer";
+import Bass from "./components/Bass";
 import Lead from "./components/Lead";
 function App() {
   // const [playState, setPlayState] = useState(Tone.Transport.state);
@@ -75,7 +75,7 @@ function App() {
                 <Tab>Lead</Tab>
               </TabList>
               <TabPanel>
-                <Sequencer patternLength={patternLength} />
+                <Bass patternLength={patternLength} />
               </TabPanel>
 
               <TabPanel>
