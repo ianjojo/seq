@@ -115,9 +115,9 @@ function App() {
           </>
         )}
         {!mouse_IsDown && (
-          <div className='flex  flex-col h-screen w-screen justify-center items-center'>
+          <div className='flex  flex-col h-screenjustify-center items-center'>
             <>
-              <p className='text-xs text-left w-[90%]'>
+              <p className='text-xs text-left w-[90%] max-w-[500px]'>
                 Welcome to SEQ. SEQ is an interactive playground inspired by
                 Propellerheads' Rebirth, consisting of a bass synth, a lead
                 synth and a drum machine. Compose your loop by clicking squares

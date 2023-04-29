@@ -43,6 +43,26 @@ const drumkits = {
     C3: "/drum-samples/house-perc2.wav",
     D3: "/drum-samples/house-perc3.wav",
   },
+  tr909: {
+    C2: "/drum-samples/909-kick.wav",
+    D2: "/drum-samples/909-snare.wav",
+    F2: "/drum-samples/909-hihat.wav",
+    G2: "/drum-samples/909-openhat.wav",
+    A2: "/drum-samples/909-clap.wav",
+    B2: "/drum-samples/909-tom.wav",
+    C3: "/drum-samples/909-ride.wav",
+    D3: "/drum-samples/909-rim.wav",
+  },
+  dmx: {
+    C2: "/drum-samples/dmx-kick.wav",
+    D2: "/drum-samples/dmx-snare.wav",
+    F2: "/drum-samples/dmx-hihat.wav",
+    G2: "/drum-samples/dmx-openhat.wav",
+    A2: "/drum-samples/dmx-clap.wav",
+    B2: "/drum-samples/dmx-tom.wav",
+    C3: "/drum-samples/dmx-ride.wav",
+    D3: "/drum-samples/dmx-rim.wav",
+  },
 };
 const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -254,7 +274,9 @@ const DrumSequencer = ({ patternLength }) => {
         >
           <option value='classic'>Synthwave</option>
           <option value='electronic'>TR-808</option>
+          <option value='tr909'>TR-909</option>
           <option value='house'>House</option>
+          <option value='dmx'>DMX</option>
         </select>
         <button
           onClick={clearPattern}
