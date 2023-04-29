@@ -233,14 +233,17 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
     updatePattern(patternCopy);
   };
   return (
-    <div className='p-4'>
+    <div className='p-4 bg-purple-700/10 rounded-lg'>
       <div className='flex'>
         <h1 className='hidden lg:inline-block p-2 orbitron text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
-          Bass
+          Lead
         </h1>
         <div className='flex items-center pr-4'>
-          <p>key</p>
-          <select onChange={(e) => setScale(e)} className='rounded-lg p-2 m-2'>
+          <p className='hidden lg:inline-block '>key</p>
+          <select
+            onChange={(e) => setScale(e)}
+            className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+          >
             <option value='C Major'>C Major</option>
             <option value='A Minor'>A Minor</option>
             <option value='G Major'>G Major</option>
@@ -253,8 +256,11 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
           </select>
         </div>
         <div className='flex items-center'>
-          <p className='w-full'>osc</p>
-          <select onChange={(e) => setOsc(e)} className='rounded-lg p-2 m-2'>
+          <p className='hidden lg:inline-block w-full'>osc</p>
+          <select
+            onChange={(e) => setOsc(e)}
+            className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+          >
             <option value='sine'>sine</option>
             <option value='sawtooth'>sawtooth</option>
             <option value='pulse'>pulse</option>
@@ -262,20 +268,21 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
             <option value='square'>square</option>
           </select>
         </div>
-        <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+        <button
+          onClick={clearPattern}
+          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+        >
           clear
         </button>
-        <button onClick={newRandomPattern} className='rounded-lg p-2 m-2'>
+        <button
+          onClick={newRandomPattern}
+          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+        >
           random
         </button>
       </div>
       <div style={{ display: "flex", justifyContent: "center " }}>
         <div style={{ width: 25 }} />
-        {/* {Array.from({ length: 16 }, (_, i) => (
-          <div key={i} style={{ width: 25, textAlign: "center" }}>
-            {i}
-          </div>
-        ))} */}
       </div>
       {pattern.map((row, y) => (
         <div key={y} style={{ display: "flex", justifyContent: "center" }}>
@@ -305,7 +312,7 @@ const Square = ({ active, selected, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]`}
+      } h-[20px] w-[20px]  lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]`}
       onClick={onClick}
     >
       {selected}

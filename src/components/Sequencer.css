@@ -82,3 +82,16 @@
 
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
 }
+
+.react-tabs__tab {
+  background: rgba(94, 14, 83, 0.301);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  font-size: 12px;
+  padding: 5px;
+}
+.react-tabs__tab--selected {
+  background: rgba(170, 134, 194, 0.541) !important;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}

@@ -1,7 +1,14 @@
 import React, { useCallback, useState, useEffect } from "react";
 import * as Tone from "tone";
 import "./Sequencer.css";
-
+import { Knob } from "react-rotary-knob";
+import {
+  CircularInput,
+  CircularTrack,
+  CircularProgress,
+  CircularThumb,
+  useCircularInputContext,
+} from "react-circular-input";
 const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -15,7 +22,7 @@ const initialPattern = [
 
 // const synth = new Tone.MonoSynth().toDestination();
 
-const acidSynth = new Tone.FMSynth({
+const leadSynth = new Tone.FMSynth({
   harmonicity: 8,
   modulationIndex: 2,
   oscillator: {
@@ -29,6 +36,7 @@ const acidSynth = new Tone.FMSynth({
   },
   modulation: {
     type: "square",
+    speed: 5,
   },
   modulationEnvelope: {
     attack: 0.002,
@@ -40,7 +48,7 @@ const acidSynth = new Tone.FMSynth({
 const reverb = new Tone.Reverb({
   decay: 8,
 }).toDestination();
-acidSynth.connect(reverb);
+leadSynth.connect(reverb);
 const feedbackDelay = new Tone.FeedbackDelay({
   delayTime: "8n", // delay time is an eighth note
   feedback: 0.5, // set feedback amount
@@ -48,7 +56,7 @@ const feedbackDelay = new Tone.FeedbackDelay({
 }).toDestination();
 
 // connect the synth to the delay
-acidSynth.connect(feedbackDelay);
+leadSynth.connect(feedbackDelay);
 function getNotesForScale(scale) {
   switch (scale) {
     case "C Major":
@@ -96,6 +104,18 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
   const [oscillatorType, setOscillatorType] = useState("sine");
   const [delayFeedback, setDelayFeedback] = useState(0.5);
   const [clearNotes, setClearNotes] = useState(false);
+  const [decay, setDecay] = useState(1);
+  const [actualDecay, setActualDecay] = useState(0);
+
+  const handleDecayChange = (e) => {
+    const newDecay = parseFloat(e);
+    const newNew = newDecay * 10;
+    setDecay(newDecay);
+    setActualDecay(newNew);
+    console.log(newNew);
+    // update envelope decay
+    leadSynth.envelope.attack = actualDecay; // update envelope decay
+  };
   const clearPattern = () => {
     const blank16 = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -176,8 +196,8 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
               0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
               19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
             ];
-      acidSynth.oscillator.type = oscillatorType;
-      const synth = currentSound === "current" ? currentSynth : acidSynth;
+      leadSynth.oscillator.type = oscillatorType;
+      const synth = currentSound === "current" ? currentSynth : leadSynth;
       const loop = new Tone.Sequence(
         (time, col) => {
           // Update active column for animation
@@ -188,7 +208,7 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
             // If active
             if (row[col]) {
               // Play based on which row
-              acidSynth.triggerAttackRelease(
+              leadSynth.triggerAttackRelease(
                 currentScale[noteIndex],
                 "8n",
                 time
@@ -256,14 +276,17 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
   };
 
   return (
-    <div className='p-4'>
+    <div className='p-4 bg-purple-700/10 rounded-lg'>
       <div className='flex'>
         <h1 className='hidden lg:inline-block p-2 orbitron text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
           Lead
         </h1>
         <div className='flex items-center pr-4'>
-          <p>key</p>
-          <select onChange={(e) => setScale(e)} className='rounded-lg p-2 m-2'>
+          <p className='hidden lg:inline-block '>key</p>
+          <select
+            onChange={(e) => setScale(e)}
+            className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+          >
             <option value='C Major'>C Major</option>
             <option value='A Minor'>A Minor</option>
             <option value='G Major'>G Major</option>
@@ -276,8 +299,11 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
           </select>
         </div>
         <div className='flex items-center'>
-          <p className='w-full'>osc</p>
-          <select onChange={(e) => setOsc(e)} className='rounded-lg p-2 m-2'>
+          <p className='hidden lg:inline-block w-full'>osc</p>
+          <select
+            onChange={(e) => setOsc(e)}
+            className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+          >
             <option value='sine'>sine</option>
             <option value='sawtooth'>sawtooth</option>
             <option value='pulse'>pulse</option>
@@ -285,10 +311,16 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
             <option value='square'>square</option>
           </select>
         </div>
-        <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+        <button
+          onClick={clearPattern}
+          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+        >
           clear
         </button>
-        <button onClick={newRandomPattern} className='rounded-lg p-2 m-2'>
+        <button
+          onClick={newRandomPattern}
+          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+        >
           random
         </button>
       </div>
@@ -330,7 +362,7 @@ const Square = ({ active, selected, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px] }`}
+      } h-[20px] w-[20px]   lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px] }`}
       onClick={onClick}
     >
       {selected}

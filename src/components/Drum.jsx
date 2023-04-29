@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import * as Tone from "tone";
 import "./Sequencer.css";
+
 const drumMap = {
   0: "C2", // kick
   1: "D2", // snare
@@ -241,13 +242,13 @@ const DrumSequencer = ({ patternLength }) => {
   }
 
   return (
-    <div className='p-4 pb-0'>
-      <div className='flex'>
-        <h1 className='hidden lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
+    <div className='p-2 w-full lg:p-4 pb-0 mt-2 bg-pink-500/10 rounded-lg'>
+      <div className='flex items-center justify-evenly'>
+        <h1 className='text-sm lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full'>
           Rhythm
         </h1>
         <select
-          className='border rounded-lg px-3 py-2'
+          className='text-xs lg:text-md  rounded-lg px-3 py-1 lg:m-2 '
           value={drumkit}
           onChange={handleDrumkitChange}
         >
@@ -255,10 +256,16 @@ const DrumSequencer = ({ patternLength }) => {
           <option value='electronic'>TR-808</option>
           <option value='house'>House</option>
         </select>
-        <button onClick={clearPattern} className='rounded-lg p-2 m-2'>
+        <button
+          onClick={clearPattern}
+          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+        >
           clear
         </button>
-        <button onClick={newRandomPattern} className='rounded-lg p-2 m-2'>
+        <button
+          onClick={newRandomPattern}
+          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+        >
           random
         </button>
       </div>
@@ -286,7 +293,7 @@ const DrumSequencer = ({ patternLength }) => {
       ))}
 
       <div className='sequencer-controls flex justify-between p-4 pb-0 flex-col'>
-        <button onClick={toggle}>
+        <button className='p-1' onClick={toggle}>
           {playState === "started" ? "Stop" : "Start"}
         </button>
 
@@ -335,7 +342,7 @@ const Square = ({ active, selected, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } w-[18px] h-[18px] lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]  `}
+      } h-[20px] w-[20px]  lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]  `}
     >
       {selected}
     </div>

@@ -4,7 +4,7 @@ import "react-tabs/style/react-tabs.css";
 import "./App.css";
 // import Sequencer from "./components/Sequencer";
 import DrumSequencer from "./components/Drum";
-
+import logo from "./logo.png";
 import * as Tone from "tone";
 import Bass from "./components/Bass";
 import Lead from "./components/Lead";
@@ -60,15 +60,33 @@ function App() {
   }, [bpm]);
   return (
     <>
-      <div className='bg-gradient-to-br from-gray-900 to-gray-700 border-2 border-gray-400 rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg lg:p-6 orbitron'>
+      <div className='bg-gradient-to-br from-gray-900 to-black lg:border-2 border-gray-400  rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg lg:p-6 orbitron h-screen lg:h-[100%]'>
+        <div className='flex justify-between w-full items-center'>
+          <div className='flex justify-center items-center h-200 '>
+            <div className='flex items-center  rounded-2xl lg:p-4 shadow-md'>
+              <img
+                src={logo}
+                alt='logo image'
+                class='w-8 h-8 lg:w-12 lg:h-12 object-cover lg:ml-4'
+              />{" "}
+              <span className=' text-sm        bg-clip-text  text-transparent   bg-gradient-to-r  from-blue-600  to-purple-600 lg:text-3xl  tracking-wider uppercase lg:mr-4'>
+                seq v0.3
+              </span>
+            </div>
+          </div>
+          <p>
+            by{" "}
+            <a
+              className='text-gray-200 underline text-sm hover:text-gray-400'
+              href='https://ianjojo.dev'
+              target='_blank'
+            >
+              ianjojo
+            </a>
+          </p>
+        </div>
         {mouse_IsDown && (
           <>
-            {/* <BassSequencer /> */}
-
-            {/* <Sequencer
-              patternLength={patternLength}
-              mouse_IsDown={mouse_IsDown}
-            /> */}
             <Tabs forceRenderTabPanel>
               <TabList>
                 <Tab>Bass</Tab>
@@ -83,34 +101,12 @@ function App() {
               </TabPanel>
             </Tabs>
             <DrumSequencer patternLength={patternLength} />
-            {/* <Lead patternLength={patternLength} /> */}
-            {/* <div className='sequencer-controls flex justify-between p-4 flex-col'>
-              <button onClick={toggle}>
-                {playState === "started" ? "Stop" : "Start"}
-              </button>
 
-              <div className='flex items-center justify-center'>
-                <div className='flex p-4'>
-                  <span className=''>BPM:</span>
-                  <span>{bpm}</span>
-                </div>
-                <input
-                  className='w-[70%]'
-                  type='range'
-                  min='60'
-                  max='240'
-                  value={bpm}
-                  onChange={handleBpmChange}
-                />
-              </div>
-
-            </div> */}
-            {/* <div onClick={() => toggle()}>{playState}</div> */}
-            <div className='flex items-center w-full px-4 justify-center'>
+            <div className='text-sm flex items-center w-full px-4 justify-center'>
               <p>pattern length</p>
               <select
                 onChange={(e) => setPatternLength(e.target.value)}
-                className='rounded-lg p-2 m-2'
+                className='text-sm rounded-lg p-2 m-2'
               >
                 <option value='16'>16</option>
                 <option value='32'>32</option>
@@ -119,9 +115,18 @@ function App() {
           </>
         )}
         {!mouse_IsDown && (
-          <>
-            <p>Click to start</p>
-          </>
+          <div className='flex  flex-col h-screen w-screen justify-center items-center'>
+            <>
+              <p className='text-xs text-left w-[90%]'>
+                Welcome to SEQ. SEQ is an interactive playground inspired by
+                Propellerheads' Rebirth, consisting of a bass synth, a lead
+                synth and a drum machine. Compose your loop by clicking squares
+                in our desired note/drum row and use the Random buttons to
+                generate inspirations and the Clear button to start again.
+              </p>
+              <p className='mt-4'>Click anywhere to begin</p>
+            </>
+          </div>
         )}
 
         {/* <Sequencer /> */}
