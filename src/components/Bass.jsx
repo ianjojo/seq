@@ -233,10 +233,10 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
     updatePattern(patternCopy);
   };
   return (
-    <div className='p-4 bg-purple-700/10 rounded-lg'>
-      <div className='flex'>
-        <h1 className='hidden lg:inline-block p-2 orbitron text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
-          Lead
+    <div className='p-4 my-8 mt-0 bg-indigo-300/10 rounded-2xl shadow-2xl shadow-purple-400/20'>
+      <div className='flex items-center justify-evenly'>
+        <h1 className='hidden lg:inline-block p-2 orbitron text-xl min-w-[80px]  text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
+          Bass
         </h1>
         <div className='flex items-center pr-4'>
           <p className='hidden lg:inline-block '>key</p>
@@ -285,10 +285,11 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
         <div style={{ width: 25 }} />
       </div>
       {pattern.map((row, y) => (
-        <div key={y} style={{ display: "flex", justifyContent: "center" }}>
-          <div className='w-[50px] lg:w-[100px] px-2 text-left items-center flex lg:font-bold text-sm lg:text-lg'>
+        <div className='flex justify-between' key={y}>
+          <div className='min-w-[60px]  max-w-[100px] px-1 text-left items-center flex lg:font-bold text-sm lg:text-lg'>
             {notes[y]}
           </div>
+
           {row.map((value, x) => (
             <Square
               key={x}
@@ -312,7 +313,7 @@ const Square = ({ active, selected, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } h-[20px] w-[20px]  lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]`}
+      } min-w-[20px] min-h-[20px] max-w-[160px] max-h-16   w-[100%] `}
       onClick={onClick}
     >
       {selected}

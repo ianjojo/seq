@@ -262,7 +262,7 @@ const DrumSequencer = ({ patternLength }) => {
   }
 
   return (
-    <div className='p-2 w-full lg:p-4 pb-0 mt-2 bg-pink-500/10 rounded-lg'>
+    <div className='p-2  my-4 lg:p-4 pb-0 mt-2 bg-pink-500/10 rounded-2xl shadow-2xl shadow-purple-500/20'>
       <div className='flex items-center justify-evenly'>
         <h1 className='text-sm lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full'>
           Rhythm
@@ -291,18 +291,13 @@ const DrumSequencer = ({ patternLength }) => {
           random
         </button>
       </div>
-      {/* <select
-        onChange={(e) => setPatternLength(e)}
-        className='rounded-lg p-2 m-2'
-      >
-        <option value='16'>16</option>
-        <option value='32'>32</option>
-      </select> */}
+
       {pattern.map((row, y) => (
-        <div key={y} style={{ display: "flex", justifyContent: "center" }}>
-          <div className='w-[50px] lg:w-[100px] px-2 text-left text-sm lg:text-lg items-center flex xl:font-bold'>
+        <div key={y} className='flex justify-between'>
+          <div className='min-w-[60px]  max-w-[100px] px-1 text-left items-center flex lg:font-bold text-sm lg:text-lg'>
             {returnDrumName(Object.values(drumMap)[y])}
           </div>
+
           {row.map((value, x) => (
             <Square
               key={x}
@@ -364,7 +359,7 @@ const Square = ({ active, selected, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } h-[20px] w-[20px]  lg:w-[25px] lg:h-[25px] xl:w-[50px] xl:h-[50px]  `}
+      } min-w-[20px] min-h-[20px] max-w-[160px] max-h-16   w-[100%] ] `}
     >
       {selected}
     </div>

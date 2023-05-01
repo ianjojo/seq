@@ -60,14 +60,14 @@ function App() {
   }, [bpm]);
   return (
     <>
-      <div className='bg-gradient-to-br from-gray-900 to-black lg:border-2 border-gray-400  rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg lg:p-6 orbitron h-screen lg:h-[100%]'>
+      <div className='bg-gradient-to-br from-gray-700 to-gray-900 lg:border-2 border-gray-400  rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg  lg:p-6 orbitron w-full lg:h-[100%] '>
         <div className='flex justify-between w-full items-center'>
           <div className='flex justify-center items-center h-200 '>
             <div className='flex items-center  rounded-2xl lg:p-4 shadow-md'>
               <img
                 src={logo}
                 alt='logo image'
-                class='w-8 h-8 lg:w-12 lg:h-12 object-cover lg:ml-4'
+                className='w-8 h-8 lg:w-12 lg:h-12 object-cover lg:ml-4'
               />{" "}
               <span className=' text-sm        bg-clip-text  text-transparent   bg-gradient-to-r  from-blue-600  to-purple-600 lg:text-3xl  tracking-wider uppercase lg:mr-4'>
                 seq v0.3
