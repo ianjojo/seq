@@ -261,7 +261,7 @@ const DrumSequencer = ({ patternLength }) => {
 
   return (
     <>
-      <div className='p-2  my-4 lg:p-4 pb-4 lg:pb-0 mt-2 bg-[#0b525b50] lg:rounded-2xl lg:border-2 border-[#7a0066] xl:w-[1000px]'>
+      <div className='p-2  my-4 lg:p-4 pb-4 lg:pb-4 mt-2 bg-[#0b525b50] lg:rounded-2xl lg:border-2 border-[#7a0066] xl:w-[1000px]'>
         <div className='flex items-center justify-evenly'>
           <h1 className='text-sm lg:inline-block p-2 orbitron lg:text-xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full'>
             Rhythm

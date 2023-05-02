@@ -124,8 +124,8 @@ function App() {
                 Welcome to SEQ. SEQ is an interactive playground inspired by
                 Propellerheads' Rebirth, consisting of a bass synth, a lead
                 synth and a drum machine. Compose your loop by clicking squares
-                in our desired note/drum row and use the Random buttons to
-                generate inspirations and the Clear button to start again.
+                in the desired note/drum row. Use the Random buttons to generate
+                inspirations and the Clear button to start again.
               </p>
               <p className='mt-4'>Click anywhere to begin</p>
             </>
