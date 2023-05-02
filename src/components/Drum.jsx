@@ -59,9 +59,9 @@ const drumkits = {
     F2: "/drum-samples/dmx-hihat.wav",
     G2: "/drum-samples/dmx-openhat.wav",
     A2: "/drum-samples/dmx-clap.wav",
-    B2: "/drum-samples/dmx-tom.wav",
-    C3: "/drum-samples/dmx-ride.wav",
-    D3: "/drum-samples/dmx-rim.wav",
+    B2: "/drum-samples/dmx-perc1.wav",
+    C3: "/drum-samples/dmx-perc2.wav",
+    D3: "/drum-samples/dmx-perc3.wav",
   },
 };
 const initialPattern = [
@@ -166,7 +166,7 @@ const DrumSequencer = ({ patternLength }) => {
       const newPattern = [];
 
       for (let j = 0; j < patternLength; j++) {
-        newPattern.push(Math.random() < 0.7 ? 0 : 1);
+        newPattern.push(Math.random() < 0.9 ? 0 : 1);
       }
 
       randomPatterns.push(newPattern);
@@ -252,8 +252,6 @@ const DrumSequencer = ({ patternLength }) => {
           }
         }
       }
-
-      console.log(patternCopy);
     }
     updatePattern(patternCopy);
   };
@@ -262,52 +260,55 @@ const DrumSequencer = ({ patternLength }) => {
   }
 
   return (
-    <div className='p-2  my-4 lg:p-4 pb-0 mt-2 bg-pink-500/10 rounded-2xl shadow-2xl shadow-purple-500/20'>
-      <div className='flex items-center justify-evenly'>
-        <h1 className='text-sm lg:inline-block p-2 orbitron lg:text-2xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full'>
-          Rhythm
-        </h1>
-        <select
-          className='text-xs lg:text-md  rounded-lg px-3 py-1 lg:m-2 '
-          value={drumkit}
-          onChange={handleDrumkitChange}
-        >
-          <option value='classic'>Synthwave</option>
-          <option value='electronic'>TR-808</option>
-          <option value='tr909'>TR-909</option>
-          <option value='house'>House</option>
-          <option value='dmx'>DMX</option>
-        </select>
-        <button
-          onClick={clearPattern}
-          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
-        >
-          clear
-        </button>
-        <button
-          onClick={newRandomPattern}
-          className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
-        >
-          random
-        </button>
-      </div>
+    <>
+      <div className='p-2  my-4 lg:p-4 pb-4 lg:pb-0 mt-2 bg-[#0b525b50] lg:rounded-2xl lg:border-2 border-[#7a0066] xl:w-[1000px]'>
+        <div className='flex items-center justify-evenly'>
+          <h1 className='text-sm lg:inline-block p-2 orbitron lg:text-xl text-blue-500 hover:text-blue-700 transition-colors text-left w-full'>
+            Rhythm
+          </h1>
+          <select
+            className='text-xs lg:text-md  rounded-lg px-3 py-1 lg:m-2 '
+            value={drumkit}
+            onChange={handleDrumkitChange}
+          >
+            <option value='classic'>Synthwave</option>
+            <option value='electronic'>TR-808</option>
+            <option value='tr909'>TR-909</option>
+            <option value='house'>House</option>
+            <option value='dmx'>DMX</option>
+          </select>
+          <button
+            onClick={clearPattern}
+            className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+          >
+            clear
+          </button>
 
-      {pattern.map((row, y) => (
-        <div key={y} className='flex justify-between'>
-          <div className='min-w-[60px]  max-w-[100px] px-1 text-left items-center flex lg:font-bold text-sm lg:text-lg'>
-            {returnDrumName(Object.values(drumMap)[y])}
-          </div>
-
-          {row.map((value, x) => (
-            <Square
-              key={x}
-              active={activeColumn === x}
-              selected={!!value}
-              onClick={() => setPattern({ x, y, value })}
-            />
-          ))}
+          <button
+            onClick={newRandomPattern}
+            className='text-sm lg:text-md rounded-lg p-2 lg:m-2'
+          >
+            random
+          </button>
         </div>
-      ))}
+
+        {pattern.map((row, y) => (
+          <div key={y} className='flex justify-between'>
+            <div className='min-w-[60px]  max-w-[100px] px-1 text-left items-center flex lg:font-bold text-sm lg:text-lg'>
+              {returnDrumName(Object.values(drumMap)[y])}
+            </div>
+
+            {row.map((value, x) => (
+              <Square
+                key={x}
+                active={activeColumn === x}
+                selected={!!value}
+                onClick={() => setPattern({ x, y, value })}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
 
       <div className='sequencer-controls flex justify-between p-4 pb-0 flex-col'>
         <button className='p-1' onClick={toggle}>
@@ -328,30 +329,13 @@ const DrumSequencer = ({ patternLength }) => {
             onChange={handleBpmChange}
           />
         </div>
-        {/* <button onClick={downloadLoop}>Download Loop</button> */}
       </div>
-    </div>
+    </>
   );
 };
 const Square = ({ active, selected, onClick }) => {
-  // const [selected, setSelected] = useState(value);
-
-  // const handleClick = () => {
-  //   setSelected(!selected);
-  //   onClick(!selected);
-  // };
-
   return (
     <div
-      // style={{
-      //   display: "flex",
-      //   alignItems: "center",
-      //   justifyContent: "center",
-      //   width: 25,
-      //   height: 25,
-      //   background: selected ? "#691ff181" : "",
-      //   border: active ? "1px solid #999" : "1px solid #eee",
-      // }}
       onClick={onClick}
       className={` grid-container flex drumsquare items-center justify-center border border-solid ${
         selected
@@ -359,7 +343,7 @@ const Square = ({ active, selected, onClick }) => {
           : ""
       } ${
         active ? "border-white" : "border-[#999]"
-      } min-w-[20px] min-h-[20px] max-w-[160px] max-h-16   w-[100%] ] `}
+      } min-w-[20px] min-h-[20px] max-w-[160px] max-h-16   w-[100%]  `}
     >
       {selected}
     </div>

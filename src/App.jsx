@@ -60,18 +60,21 @@ function App() {
   }, [bpm]);
   return (
     <>
-      <div className='bg-gradient-to-br from-gray-700 to-gray-900 lg:border-2 border-gray-400  rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg  lg:p-6 orbitron w-full lg:h-[100%] '>
+      <div className='bg-[#110e1b] lg:border-4 border-[#7a0066]  rounded-lg shadow-md text-gray-400 text-center text-shadow-md text-lg  lg:p-6 orbitron w-full lg:h-[100%] shadow-[0_20px_80px_rgba(122,_0,_102,_0.7)]  '>
         <div className='flex justify-between w-full items-center'>
           <div className='flex justify-center items-center h-200 '>
             <div className='flex items-center  rounded-2xl lg:p-4 shadow-md'>
-              <img
+              {/* <img
                 src={logo}
                 alt='logo image'
                 className='w-8 h-8 lg:w-12 lg:h-12 object-cover lg:ml-4'
-              />{" "}
-              <span className=' text-sm        bg-clip-text  text-transparent   bg-gradient-to-r  from-blue-600  to-purple-600 lg:text-3xl  tracking-wider uppercase lg:mr-4'>
-                seq v0.3
-              </span>
+              />{" "} */}
+              <div className='flex justify-center items-center '>
+                <span className=' text-sm        bg-clip-text  text-transparent   bg-gradient-to-r  from-blue-600  to-purple-600 lg:text-3xl  tracking-wider uppercase lg:mr-4'>
+                  seq
+                </span>
+                <p className='text-xs'>v 0.3</p>
+              </div>
             </div>
           </div>
           <p>

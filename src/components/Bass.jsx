@@ -233,8 +233,8 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
     updatePattern(patternCopy);
   };
   return (
-    <div className='p-4 my-8 mt-0 bg-indigo-300/10 rounded-2xl shadow-2xl shadow-purple-400/20'>
-      <div className='flex items-center justify-evenly'>
+    <div className='p-4 lg:my-8 mt-0 lg:border-2 bg-[#3a015c70] lg:rounded-2xl  border-[#7a0066] '>
+      <div className='flex items-center justify-evenly pb-4'>
         <h1 className='hidden lg:inline-block p-2 orbitron text-xl min-w-[80px]  text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
           Bass
         </h1>

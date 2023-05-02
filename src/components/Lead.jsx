@@ -276,8 +276,8 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
   };
 
   return (
-    <div className='p-4 my-8 mt-0 bg-pink-400/20 rounded-2xl shadow-2xl shadow-blue-500/20'>
-      <div className='flex justify-center items-center'>
+    <div className='p-4 lg:my-8 mt-0 bg-[#5c162e70] lg:rounded-2xl lg:border-2 border-[#7a0066]'>
+      <div className='flex justify-center items-center pb-4 '>
         <h1 className='hidden lg:inline-block p-2 orbitron text-xl min-w-[80px] text-blue-500 hover:text-blue-700 transition-colors text-left w-full '>
           Lead
         </h1>
