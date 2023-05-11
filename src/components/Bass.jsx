@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import * as Tone from "tone";
 import "./Sequencer.css";
 
+// an initial pattern of empty squares
 const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -13,7 +14,6 @@ const initialPattern = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-// const synth = new Tone.MonoSynth().toDestination();
 const currentSynth = new Tone.MonoSynth().toDestination();
 const acidSynth = new Tone.MonoSynth({
   oscillator: {
@@ -31,6 +31,8 @@ const acidSynth = new Tone.MonoSynth({
     release: 0.5,
   },
 }).toDestination();
+
+// the various notes available to each scale
 function getNotesForScale(scale) {
   switch (scale) {
     case "C Major":
@@ -57,7 +59,7 @@ function getNotesForScale(scale) {
       return [];
   }
 }
-const Bass = ({ mouse_IsDown, patternLength }) => {
+const Bass = ({ mouse_IsDown, patternLength, gitArray }) => {
   const [currentScale, setCurrentScale] = useState([
     "C2",
     "D2",
@@ -75,6 +77,8 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
   const [pattern, updatePattern] = useState(initialPattern);
   const [currentSound, setCurrentSound] = useState("acid");
   const [oscillatorType, setOscillatorType] = useState("sine");
+  const [reverseArray, setReverseArray] = useState([]);
+
   function createRandomPattern(numRows, numCols, chanceOfZero = 0.1) {
     const pattern = [];
     for (let j = 0; j < numCols; j++) {
@@ -145,7 +149,28 @@ const Bass = ({ mouse_IsDown, patternLength }) => {
       updatePattern(blank32);
     }
   };
+  // const reverseArrays = (array) => {
+  //   array.reverse();
+  //   for (let i = 0; i < array.length; i++) {
+  //     array[i].reverse();
+  //   }
+  //   setGitArrayReverse(array);
+  // };
 
+  useEffect(() => {
+    if (gitArray.length > 1) {
+      let newArray = gitArray.reverse();
+
+      for (let i = 0; i < newArray.length; i++) {
+        newArray[i].reverse();
+      }
+      setReverseArray(newArray);
+    }
+  }, [gitArray]);
+
+  useEffect(() => {
+    updatePattern(reverseArray.reverse());
+  }, [reverseArray]);
   useEffect(
     () => {
       const array =

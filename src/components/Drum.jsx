@@ -94,7 +94,7 @@ const returnDrumName = (drum) => {
     return "PC3";
   }
 };
-const DrumSequencer = ({ patternLength }) => {
+const DrumSequencer = ({ patternLength, gitArray }) => {
   const [playState, setPlayState] = useState(Tone.Transport.state);
   const [activeColumn, setColumn] = useState(0);
   const [pattern, updatePattern] = useState(initialPattern);
@@ -258,7 +258,22 @@ const DrumSequencer = ({ patternLength }) => {
   function handleBpmChange(event) {
     setBpm(event.target.value);
   }
+  useEffect(() => {
+    const beat = [
+      [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
 
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    if (gitArray.length > 1) {
+      updatePattern(beat);
+    }
+  }, [gitArray]);
   return (
     <>
       <div className='p-2  my-4 lg:p-4 pb-4 lg:pb-4 mt-2 bg-[#0b525b50] lg:rounded-2xl lg:border-2 border-[#7a0066] xl:w-[1000px]'>

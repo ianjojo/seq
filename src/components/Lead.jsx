@@ -83,7 +83,7 @@ function getNotesForScale(scale) {
       return [];
   }
 }
-const Lead = ({ mouse_IsDown, patternLength }) => {
+const Lead = ({ mouse_IsDown, patternLength, gitArray }) => {
   const [currentScale, setCurrentScale] = useState([
     "C4",
     "D4",
@@ -273,6 +273,15 @@ const Lead = ({ mouse_IsDown, patternLength }) => {
       console.log(patternCopy);
     }
     updatePattern(patternCopy);
+  };
+
+  useEffect(() => {
+    if (gitArray.length > 1) {
+      updatePattern(gitArray);
+    }
+  }, [gitArray]);
+  const playGithub = () => {
+    updatePattern(gitArray);
   };
 
   return (
