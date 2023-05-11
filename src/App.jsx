@@ -114,7 +114,6 @@ function App() {
       .catch((error) => {
         console.error("Error fetching data from GitHub API:", error);
         setMessage("Error fetching data from GitHub API");
-        // TODO: Add error handling logic, such as setting an error message state
       });
   };
 
@@ -187,19 +186,35 @@ function App() {
         </div>
       )}
       {showModal && (
-        <div className='flex ml-4 fixed h-screen w-screen justify-center items-center top-0 left-0 bg-black/20 z-40'>
-          <div className='flex flex-col p-16 lg:my-8 mt-0 bg-[#1d060e] lg:rounded-2xl lg:border-2 border-[#7a0066] pb-16 z-40'>
-            <p className='pb-8  w-full'>enter your GitHub username.</p>
+        <div
+          onClick={handleModalClick}
+          className='flex ml-4 fixed h-screen w-screen justify-center items-center top-0 left-0 bg-black/20 z-40'
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className='flex relative flex-col p-16 lg:my-8 mt-0 bg-[#1d060e] lg:rounded-2xl lg:border-2 border-[#7a0066] pb-16 z-40'
+          >
+            <p
+              onClick={handleModalClick}
+              className='absolute -top-0 right-2 text-2xl cursor-pointer'
+            >
+              x
+            </p>
+            <p className='pb-8 orbitron w-full'>Enter a GitHub username.</p>
             <div className='flex '>
               <input
                 type='text'
                 value={gitName}
-                placeholder='github username'
+                placeholder='ianjojo'
                 onChange={handleTextInput}
-                className=' w-[150px] mx-4 p-2 rounded-lg'
+                className=' w-[150px] mx-4 p-2 rounded-lg orbitron'
               />
 
-              <button disabled={!gitName} onClick={handlePlayMyGithub}>
+              <button
+                disabled={!gitName}
+                onClick={handlePlayMyGithub}
+                className='orbitron'
+              >
                 go!
               </button>
             </div>
@@ -250,14 +265,14 @@ function App() {
             <DrumSequencer patternLength={patternLength} gitArray={gitArray} />
 
             <div className='text-sm flex items-center w-full px-4 justify-center'>
-              <p>pattern length</p>
+              {/* <p>pattern length</p>
               <select
                 onChange={(e) => setPatternLength(e.target.value)}
                 className='text-sm rounded-lg p-2 m-2'
               >
                 <option value='16'>16</option>
                 <option value='32'>32</option>
-              </select>
+              </select> */}
               <button onClick={handleModalClick}>git visualizer</button>
             </div>
             {message}
